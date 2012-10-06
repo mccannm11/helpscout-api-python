@@ -4,13 +4,13 @@ import base64
 
 class Attachment:
     def __init__(self):
-        self._id = None
-        self._mimeType = None
-        self._fileName = None
-        self._size = None
-        self._width = None
-        self._height = None
-        self._url = None
+        self.id = None
+        self.mimeType = None
+        self.fileName = None
+        self.size = None
+        self.width = None
+        self.height = None
+        self.url = None
 
     def isImage(self):
         return self.mimeType != NULL and mimeType.substring(0, 4) == "image"
