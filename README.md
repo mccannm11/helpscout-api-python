@@ -4,9 +4,9 @@ helpscout-api-python
 Python wrapper for the Help Scout API 
 
 <pre>
-<h3>
+<h5>
 Dependencies
-</h3>
+</h5>
 <ul>
 <li>
 Python 2.7
