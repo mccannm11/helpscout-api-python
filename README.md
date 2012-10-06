@@ -5,6 +5,7 @@ helpscout-api-python
 
 Python wrapper for the Help Scout API 
 
+Trying to get some python chop together. Criticism is much appreciated.
 This is a pre aplha release and is still very much under construction.
 
 
