@@ -23,6 +23,27 @@ json
 base64
 </li>
 </ul>
+Example Usage: API
+---------------------
+<pre><code>
+import ApiClient
+
+client = ApiClient.ApiClient()
+client.apiKey = "your-api-key-here"
+
+mailboxes = client.getMailboxes()
+folders = mailboxes.folders
+for f in folders:
+    #do things here
+
+
+customer = client.getCustomer(customer-id-here)
+if customers.socialProfiles != None:
+    for s in customers.socialProfiles:
+         #do things
+
+</code></pre>
+
 
 Field Selectors
 ---------------------
