@@ -1,7 +1,11 @@
 helpscout-api-python
 ====================
 
+
+
 Python wrapper for the Help Scout API 
+
+This is a pre aplha release and is still very much under construction.
 
 
 <h5>
