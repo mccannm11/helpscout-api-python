@@ -3,7 +3,7 @@ helpscout-api-python
 
 Python wrapper for the Help Scout API 
 
-<pre>
+
 <h5>
 Dependencies
 </h5>
@@ -21,4 +21,4 @@ json
 base64
 </li>
 </ul>
-</pre>
+
