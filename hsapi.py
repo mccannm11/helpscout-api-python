@@ -36,8 +36,6 @@ class ApiClient(object):
 
     def conversation(self, conversation_id, fields=None):
         url = add_fields("conversations/" + str(conversation_id) + ".json", fields)
-        if fields != None:
-            url = self.setFields(url, fields)
         return self.item(url, "Conversation", 200)
 
     def attachment_data(self, attachment_id):
@@ -111,7 +109,7 @@ def check_status_code(code, expected):
 
 def add_fields(url, fields):
     final_str = url
-    if (fields != None and len(fields) > 0 ):
+    if fields != None and len(fields) > 0 :
         final_str += "?fields="
         sep = ""
         for key,value in fields:
