@@ -28,7 +28,7 @@ Example Usage: API
 <pre><code>
 import hsapi
 
-client = ApiClient.ApiClient()
+client = hsapi.ApiClient()
 client.API_KEY = "your-api-key-here"
 
 mailboxes = client.mailboxes()
