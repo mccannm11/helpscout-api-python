@@ -26,7 +26,7 @@ base64
 Example Usage: API
 ---------------------
 <pre><code>
-import ApiClient
+import hsapi
 
 client = ApiClient.ApiClient()
 client.API_KEY = "your-api-key-here"
