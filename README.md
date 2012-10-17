@@ -29,15 +29,15 @@ Example Usage: API
 import ApiClient
 
 client = ApiClient.ApiClient()
-client.apiKey = "your-api-key-here"
+client.API_KEY = "your-api-key-here"
 
-mailboxes = client.getMailboxes()
+mailboxes = client.mailboxes()
 folders = mailboxes.folders
 for f in folders:
     #do things here
 
 
-customer = client.getCustomer(customer-id-here)
+customer = client.customer(customer-id-here)
 if customers.socialProfiles != None:
     for s in customers.socialProfiles:
          #do things
@@ -54,27 +54,27 @@ ApiClient Methods
 Each method can accept a field selector as an addition parameter.
 
 ### Mailboxes
-* getMailboxes()
-* getMailbox(int mailbox_id)
+* mailboxes()
+* mailbox(int mailbox_id)
 
 ### Folders
-* getFolders(int mailbox_id)
+* folders(int mailbox_id)
 
 ### Conversations
-* getConversationsForFolder(int mailbox_id, int folder_id)
-* getConversationsForMailbox(int mailbox_id)
-* getConversationsForCustomerByMailbox(int mailbox_id, int customer_id)
-* getConversation(Integer conversation_id)
+* conversations_for_folder(int mailbox_id, int folder_id)
+* conversations_for_mailbox(int mailbox_id)
+* conversations_for_customerByMailbox(int mailbox_id, int customer_id)
+* conversation(Integer conversation_id)
 
 ### Attachments
-* getAttachmentData(int attachment_id)
+* attachment_data(int attachment_id)
 
 ### Customers
-* getCustomers()
-* getCustomer(int customer_id)
+* customers()
+* customer(int customer_id)
 
 ### Users
-* getUsers()
-* getUsersForMailbox(int mailbox_id)
-* getUser(int user_id)
+* users()
+* users_for_mailbox(int mailbox_id)
+* user(int user_id)
 
