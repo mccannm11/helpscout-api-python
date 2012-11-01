@@ -212,16 +212,16 @@ class AbstractThread:
         self.bccList = None
         self.attachments  = None
 
-        def isPublished(self):
+    def isPublished(self):
             return self.state == "published" ##hmmm these are not right
 
-        def isDraft(self):
+    def isDraft(self):
             return self.state == "draft"
 
-        def isHeldForReview(self):
+    def isHeldForReview(self):
             return self.state == "underreview"
 
-        def hasAttachments(self):
+    def hasAttachments(self):
             return self.attachemnts != None and len(self.attachments) > 0
 
 
