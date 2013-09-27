@@ -21,7 +21,7 @@ class ApiClient(object):
         return self.page(url, "Folder", 200)
 
     def conversations_for_folders(self, mailbox_id, folder_id, fields=None):
-        url = "mailboxes/" + str(mailbox_id) + "/folder/" + str(folder_id) + "conversations.json"
+        url = "mailboxes/" + str(mailbox_id) + "/folders/" + str(folder_id) + "/conversations.json"
         url = add_fields(url, fields)
         return self.page(url, "Conversation", 200)
 
@@ -54,7 +54,7 @@ class ApiClient(object):
         return self.page(url, "Customer", 200)
 
     def user(self, user_id, fields=None):
-        url = set_fields("users/" + str(user_id) + ".json", fields)
+        url = add_fields("users/" + str(user_id) + ".json", fields)
         return self.item(url, "User", 200)
 
     def users(self, fields=None):
@@ -63,7 +63,7 @@ class ApiClient(object):
 
     def users_for_mailbox(self, mailbox_id, fields=None):
         url = add_fields("mailboxes/" + str(mailbox_id) + "users.json", fields)
-        return page(url, "User", 200)
+        return self.page(url, "User", 200)
 
     def call_server(self, url, expected_code):
         auth =  "Basic " + self.encoded() 
@@ -101,9 +101,9 @@ def check_status_code(code, expected):
     if code == expected:
         return
     default_status = "Invalid API Key"
-    status = status_codes(str(code))
+    status = status_codes[str(code)]
     if status != None:
-        raise ApiException(status_code)
+        raise ApiException(status)
     else:
         raise ApiException(default_status)
 
@@ -125,8 +125,7 @@ def parse(json, clazz):
 
 def parse_list(lizt, clazz):
     for i in range (len(lizt)):
-        print i
-        lizt[i] = parse(lizt[i], clazz) 
+        lizt[i] = parse(lizt[i], clazz)
 
     return lizt
 
