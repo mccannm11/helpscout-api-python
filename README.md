@@ -61,7 +61,7 @@ Each method can accept a field selector as an addition parameter.
 * folders(int mailbox_id)
 
 ### Conversations
-* conversations_for_folder(int mailbox_id, int folder_id)
+* conversations_for_folders(int mailbox_id, int folder_id)
 * conversations_for_mailbox(int mailbox_id)
 * conversations_for_customerByMailbox(int mailbox_id, int customer_id)
 * conversation(Integer conversation_id)
