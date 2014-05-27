@@ -4,7 +4,7 @@ import base64
 import models
 
 
-class ApiClient(object):
+class Client(object):
     BASE_URL = "https://api.helpscout.net/v1/"
     API_KEY = ""
     
