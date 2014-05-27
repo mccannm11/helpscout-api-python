@@ -3,29 +3,14 @@ helpscout-api-python
 
 Python wrapper for the Help Scout API 
 
-Trying to get some python chops together. Criticism is much appreciated.
-This is a pre aplha release and is still very much under construction.
+## Installation:
+`git clone git@github.com/mccannm11/helpscout-api-python`
+`cd helpscout-api-python && python setup.py install`
 
-<h5>
-Dependencies
-</h5>
-<ul>
-<li>
-Python 2.7
-</li>
-<li>
-requests
-</li>
-<li>
-json
-</li>
-<li>
-base64
-</li>
-</ul>
 Example Usage: API
 ---------------------
-<pre><code>
+
+```
 import hsapi
 
 client = hsapi.ApiClient()
@@ -42,7 +27,7 @@ if customers.socialProfiles != None:
     for s in customers.socialProfiles:
          #do things
 
-</code></pre>
+```
 
 
 Field Selectors
