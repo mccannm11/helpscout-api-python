@@ -87,8 +87,8 @@ class Client(object):
         # support calling many times to get subsequent pages
         caller = inspect.stack()[1][3]
         if caller in self.pagestate:
-            curpage = self.pagestate[url].page
-            maxpage = self.pagestate[url].pages
+            curpage = self.pagestate[caller].page
+            maxpage = self.pagestate[caller].pages
             if curpage < maxpage:
                 page = curpage + 1
             elif curpage == maxpage:
