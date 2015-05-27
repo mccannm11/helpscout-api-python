@@ -11,13 +11,13 @@ Example Usage: API
 ---------------------
 
 ```
-import hsapi
+import helpscout
 
-client = hsapi.ApiClient()
+client = helpscout.Client()
 client.API_KEY = "your-api-key-here"
 
 mailboxes = client.mailboxes()
-folders = mailboxes.folders
+folders = client.folders(mailboxes.items[0].id)
 for f in folders:
     #do things here
 
@@ -63,3 +63,9 @@ Each method can accept a field selector as an addition parameter.
 * users_for_mailbox(int mailbox_id)
 * user(int user_id)
 
+### Pagination
+Multiple calls to the above calls that support pagination will return subsequent pages.  
+* reset() - to clear the pagination couters and start from page 1 again.
+
+You could also set the starting page 
+* setpage(function, page_number)
