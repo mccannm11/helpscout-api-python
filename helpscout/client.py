@@ -3,6 +3,13 @@ import json
 import base64
 from . import models
 import inspect
+import logging
+
+logging.basicConfig() 
+logging.getLogger().setLevel(logging.DEBUG)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
 
 class Client(object):
     def __init__(self):
@@ -14,27 +21,27 @@ class Client(object):
         url = add_fields("mailboxes/{}.json".format(mailbox_id), fields)
         return self.item(url, "Mailbox", 200)
 
-    def mailboxes(self, fields=None):
+    def mailboxes(self, fields=None, **kwargs):
         url = add_fields("mailboxes.json", fields)
-        return self.page(url,"Mailbox", 200)
+        return self.page(url,"Mailbox", 200, **kwargs)
 
-    def folders(self, mailbox_id, fields=None):
+    def folders(self, mailbox_id, fields=None, **kwargs):
         url = add_fields("mailboxes/{}/folders.json".format(mailbox_id), fields)
-        return self.page(url, "Folder", 200)
+        return self.page(url, "Folder", 200, **kwargs)
 
-    def conversations_for_folders(self, mailbox_id, folder_id, fields=None):
+    def conversations_for_folders(self, mailbox_id, folder_id, fields=None, **kwargs):
         url = "mailboxes/{}/folders/{}/converstations.json".format(mailbox_id, folder_id)
         url = add_fields(url, fields)
-        return self.page(url, "Conversation", 200)
+        return self.page(url, "Conversation", 200, **kwargs)
 
-    def conversations_for_mailbox(self, mailbox_id, fields=None):
+    def conversations_for_mailbox(self, mailbox_id, fields=None, **kwargs):
         url = add_fields("mailboxes/{}/conversations.json".format(mailbox_id), fields)
-        return self.page(url, "Conversation", 200)
+        return self.page(url, "Conversation", 200, **kwargs)
 
-    def conversation_for_customer_by_mailbox(self, mailbox_id, customer_id, fields=None):
+    def conversation_for_customer_by_mailbox(self, mailbox_id, customer_id, fields=None, **kwargs):
         url = "mailboxes/{}/customers/{}/conversations.json".format(mailbox_id, customer_id)
         url = add_fields(url, fields)
-        return self.page(url, "Conversation", 200)
+        return self.page(url, "Conversation", 200, **kwargs)
 
     def conversation(self, conversation_id, fields=None):
         url = add_fields("conversations/{}.json".format(conversation_id), fields)
@@ -47,56 +54,56 @@ class Client(object):
         item = json_obj["item"]
         return item["data"]
 
-    def customers(self, fields=None):
+    def customers(self, fields=None, **kwargs):
         url = add_fields("customers.json", fields)
-        return self.page(url, "Customer", 200)
+        return self.page(url, "Customer", 200, **kwargs)
 
-    def customer(self, customer_id, fields=None):
+    def customer(self, customer_id, fields=None, **kwargs):
         url = add_fields("customers/{}.json".format(customer_id), fields)
-        return self.page(url, "Customer", 200)
+        return self.page(url, "Customer", 200, **kwargs)
 
     def user(self, user_id, fields=None):
         url = add_fields("users/{}.json".format(user_id), fields)
         return self.item(url, "User", 200)
 
-    def users(self, fields=None):
+    def users(self, fields=None, **kwargs):
         url = add_fields("users.json", fields)
-        return self.page(url, "User", 200)
+        return self.page(url, "User", 200, **kwargs)
 
-    def users_for_mailbox(self, mailbox_id, fields=None):
+    def users_for_mailbox(self, mailbox_id, fields=None, **kwargs):
         url = add_fields("mailboxes/{}/users.json".format(mailbox_id), fields)
-        return self.page(url, "User", 200)
+        return self.page(url, "User", 200, **kwargs)
 
-    def call_server(self, url, expected_code, page=None):
+    def call_server(self, url, expected_code, **kwargs):
         headers = {'Content-Type': 'application-json'
                   , 'Accept' : 'application-json'
                   , 'Accept-Encoding' : 'gzip, deflate'
                   }
         qsp = {}
-        if page:
-            qsp = {'page': page}
+        if kwargs:
+            qsp = kwargs
         r = requests.get(self.BASE_URL + url, headers=headers, auth=(self.API_KEY, 'x'), params=qsp)
         check_status_code(r.status_code, expected_code)
         return r.text
 
     def item(self, url, clazz, expected_code):
         string_json = self.call_server( url, expected_code )
-        return Parser.parse(json.loads(string_json)["item"], clazz)
+        return parse(json.loads(string_json)["item"], clazz)
 
-    def page(self, url, clazz, expected_code):
+    def page(self, url, clazz, expected_code, **kwargs):
         # support calling many times to get subsequent pages
         caller = inspect.stack()[1][3]
         if caller in self.pagestate:
             curpage = self.pagestate[caller].get('page')
             maxpage = self.pagestate[caller].get('pages')
             if curpage < maxpage:
-                page = curpage + 1
+                kwargs['page'] = curpage + 1
             elif curpage == maxpage:
                 return None
         else:
-            page = 1
+            kwargs['page'] = 1
 
-        string_json = self.call_server(url, expected_code, page)
+        string_json = self.call_server(url, expected_code, **kwargs)
         json_obj = json.loads(string_json)
         p = Page()
         for key, value in json_obj.items():
