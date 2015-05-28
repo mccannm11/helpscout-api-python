@@ -49,7 +49,7 @@ Each method can accept a field selector as an addition parameter.
 * conversations_for_folders(int mailbox_id, int folder_id)
 * conversations_for_mailbox(int mailbox_id)
 * conversations_for_customerByMailbox(int mailbox_id, int customer_id)
-* conversation(Integer conversation_id)
+* conversation(int conversation_id)
 
 ### Attachments
 * attachment_data(int attachment_id)
@@ -65,7 +65,6 @@ Each method can accept a field selector as an addition parameter.
 
 ### Pagination
 Multiple calls to the above calls that support pagination will return subsequent pages.  
-* reset() - to clear the pagination couters and start from page 1 again.
-
-You could also set the starting page 
-* setpage(function, page_number)
+* clearstate() - to clear the pagination couters and start from page 1 again.
+* clearstate(str 'function') - to clear the pagination couter for a given function, e.g. "folders"
+You could set the starting page by passing in page=N as a keyword arg.

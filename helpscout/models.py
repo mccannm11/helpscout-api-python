@@ -1,136 +1,134 @@
-
 class Attachment:
     def __init__(self):
-        self._id = None
-        self._mimeType = None
-        self._fileName = None
-        self._size = None
-        self._width = None
-        self._height = None
-        self._url = None
+        self.id = None
+        self.mimetype = None
+        self.filename = None
+        self.size = None
+        self.width = None
+        self.height = None
+        self.url = None
 
-    def isImage(self):
-        return self.mimeType != NULL and mimeType.substring(0, 4) == "image"
-        
+    def isimage(self):
+        return self.mimetype is not None and self.mimetype.startwith('image')
+
 class Conversation:
     def __init__(self):
         self.id = None
-        self.folderId = None
-        self.isDraft = None
+        self.folderid = None
+        self.isdraft = None
         self.number = None
         self.source = None
         self.owner = None
         self.mailbox = None
         self.customer = None
-        self.threadCount = None
+        self.threadcount = None
         self.status = None
         self.subject = None
         self.preview = None
-        self.createdAt = None
-        self.modifiedAt = None
-        self.closedAt = None
-        self.closedBy = None
-        self.createdBy = None
-        self.ccList = None
-        self.bccList = None
+        self.createdat = None
+        self.modifiedat = None
+        self.closedat = None
+        self.closedby = None
+        self.createdby = None
+        self.cclist = None
+        self.bcclist = None
         self.tags = None
 
-        def isCreatedByCustomer(self):
-            return self.createdBy != None and isinstance(self.createdBy, CustomerRef)
+    def iscreatedbycustomer(self):
+        return self.createdby is not None and isinstance(self.createdby, CustomerRef)
 
-        def hasCcList(self):
-            return self.ccList != None and len(self.ccList) > 0
+    def hascclist(self):
+        return self.cclist is not None and len(self.cclist) > 0
 
-        def hasBccList(self):
-            return self.bccList != None and len(self.bccList) > 0
+    def hasbcclist(self):
+        return self.bcclist is not None and len(self.bcclist) > 0
 
-        def hasTags(self):
-            return self.tags != None and len(self.tags) > 0
-        
+    def hastags(self):
+        return self.tags is not None and len(self.tags) > 0
+
 class Customer:
     def __init__(self):
         self.id = None
-        self.firstName = None
-        self.lastName = None
+        self.firstname = None
+        self.lastname = None
         self.gender = None
         self.age = None
-        self.jobLocation = None
+        self.joblocation = None
         self.location = None
         self.organization = None
-        self.photoUrl = None
-        self.photoType = None
-        self.createdAt = None
-        self.modifiedAt = None
+        self.photourl = None
+        self.phototype = None
+        self.createdat = None
+        self.modifiedat = None
         self.background = None
-        self.address = None 
-        self.socialProfiles = None
+        self.address = None
+        self.socialprofiles = None
         self.emails = None
         self.phones = None
         self.chats = None
         self.websites = None
 
-        def hasBackground(self):
-            return self.background != None
+    def hasbackground(self):
+        return self.background is not None
 
-        def hasAddress(self):
-            return self.address != None
+    def hasaddress(self):
+        return self.address is not None
 
-        def hasSocialProfiles(self):
-            return self.socialProfiles != None and len(self.socialProfiles) > 0
+    def hassocialprofiles(self):
+        return self.socialprofiles is not None and len(self.socialprofiles) > 0
 
-        def hasEmails(self):
-            return self.emails != None
+    def hasemails(self):
+        return self.emails is not None
 
-        def hasPhones(self):
-            return self.phones != None and len(self.phones) > 0
+    def hasphones(self):
+        return self.phones is not None and len(self.phones) > 0
 
-        def hasChats(self):
-            return self.chats != None and len(self.chats) > 0
+    def haschats(self):
+        return self.chats is not None and len(self.chats) > 0
 
-        def hasWebsites(self):
-            return self.websites != None and len(self.websites) > 0 
+    def haswebsites(self):
+        return self.websites is not None and len(self.websites) > 0
 
-        
 class Folder:
     def __init__(self):
         self.id = None
         self.name = None
         self.type = None
-        self.userId = None
-        self.totalCount = None
-        self.activeCount = None
-        self.modifiedAt = None
+        self.userid = None
+        self.totalcount = None
+        self.activecount = None
+        self.modifiedat = None
 
-        
+
 class Mailbox:
     def __init__(self):
         self.id = None
         self.name = None
         self.slug = None
         self.email = None
-        self.createdAt = None
-        self.modifiedAt = None
+        self.createdat = None
+        self.modifiedat = None
 
-        
+
 class Source:
     def __init__(self):
         self.type = None
         self.via = None
 
-    def isViaCustomer(self):
-        return self.via != None and "customer" == self.via
+    def isviacustomer(self):
+        return self.via is not None and "customer" == self.via
 
-    
+
 class User:
     def __init__(self):
         self.id = None
-        self.firstName = None
+        self.firstname = None
         self.email = None
         self.role = None
         self.timezone = None
-        self.photoUrl = None
-        self.createdAt = None
-        self.modifiedAt = None
+        self.photourl = None
+        self.createdat = None
+        self.modifiedat = None
 
 
 
@@ -140,10 +138,10 @@ class Address:
         self.lines = None
         self.city = None
         self.state = None
-        self.postalCode = None
+        self.postalcode = None
         self.country = None
-        self.createdAt = None
-        self.modifiedAt = None
+        self.createdat = None
+        self.modifiedat = None
 
 
 class CustomerEntry:
@@ -156,26 +154,26 @@ class CustomerEntry:
 
 class EmailEntry(CustomerEntry):
     def __init__(self):
-        pass
+        super(EmailEntry, self).__init__()
 
 
 class ChatEntry(CustomerEntry):
     def __init__(self):
-        pass
+        super(ChatEntry, self).__init__()
 
 
 class PhoneEntry(CustomerEntry):
     def __init__(self):
-        pass
+        super(PhoneEntry, self).__init__()
 
 
 class SocialProfileEntry(CustomerEntry):
     def __init__(self):
-        pass
+        super(SocialProfileEntry, self).__init__()
 
 class WebsiteEntry(CustomerEntry):
     def __init__(self):
-        pass
+        super(WebsiteEntry, self).__init__()
 
 
 class MailboxRef:
@@ -187,19 +185,19 @@ class MailboxRef:
 class AbstractRef:
     def __init__(self):
         self.id = None
-        self.firstName = None
-        self.lastName = None
+        self.firstname = None
+        self.lastname = None
         self.email = None
 
 
 class UserRef(AbstractRef):
     def __init__(self):
-        pass
+        super(UserRef, self).__init__()
 
 
 class CustomerRef(AbstractRef):
     def __init__(self):
-        pass
+        super(CustomerRef, self).__init__()
 
 
 class AbstractThread:
@@ -207,46 +205,38 @@ class AbstractThread:
         self.id = None
         self.state = None
         self.body = None
-        self.toList = None
-        self.ccList = None
-        self.bccList = None
-        self.attachments  = None
+        self.tolist = None
+        self.cclist = None
+        self.bcclist = None
+        self.attachments = None
 
-    def isPublished(self):
-            return self.state == "published" ##hmmm these are not right
+    def ispublished(self):
+        return self.state == "published" ##hmmm these are not right
 
-    def isDraft(self):
-            return self.state == "draft"
+    def isdraft(self):
+        return self.state == "draft"
 
-    def isHeldForReview(self):
-            return self.state == "underreview"
+    def isheldforreview(self):
+        return self.state == "underreview"
 
-    def hasAttachments(self):
-            return self.attachemnts != None and len(self.attachments) > 0
-
-
-class Customer(AbstractRef):
-    def __init__(self):
-        pass
+    def hasattachments(self):
+        return self.attachments is not None and len(self.attachments) > 0
 
 
 class ForwardChild(AbstractRef):
-    def __init(self):
-        pass
-
+    def __init__(self):
+        super(ForwardChild, self).__init__()
 
 class Note(AbstractRef):
     def __init__(self):
-        pass
-
+        super(Note, self).__init__()
 
 class Message(AbstractRef):
     def __init__(self):
-        pass
-
+        super(Message, self).__init__()
 
 class ForwardParent(AbstractRef):
     def __init__(self):
-        pass
+        super(ForwardParent, self).__init__()
 
 

@@ -1,20 +1,12 @@
 import requests
 import json
-import base64
 from . import models
 import inspect
-import logging
-
-logging.basicConfig() 
-logging.getLogger().setLevel(logging.DEBUG)
-requests_log = logging.getLogger("requests.packages.urllib3")
-requests_log.setLevel(logging.DEBUG)
-requests_log.propagate = True
 
 class Client(object):
     def __init__(self):
-        self.BASE_URL = "https://api.helpscout.net/v1/"
-        self.API_KEY = ""
+        self.base_url = "https://api.helpscout.net/v1/"
+        self.api_key = ""
         self.pagestate = {}
 
     def mailbox(self, mailbox_id, fields=None):
@@ -23,13 +15,13 @@ class Client(object):
 
     def mailboxes(self, fields=None, **kwargs):
         url = add_fields("mailboxes.json", fields)
-        return self.page(url,"Mailbox", 200, **kwargs)
+        return self.page(url, "Mailbox", 200, **kwargs)
 
     def folders(self, mailbox_id, fields=None, **kwargs):
         url = add_fields("mailboxes/{}/folders.json".format(mailbox_id), fields)
         return self.page(url, "Folder", 200, **kwargs)
 
-    def conversations_for_folders(self, mailbox_id, folder_id, fields=None, **kwargs):
+    def conversations_for_folder(self, mailbox_id, folder_id, fields=None, **kwargs):
         url = "mailboxes/{}/folders/{}/converstations.json".format(mailbox_id, folder_id)
         url = add_fields(url, fields)
         return self.page(url, "Conversation", 200, **kwargs)
@@ -38,8 +30,13 @@ class Client(object):
         url = add_fields("mailboxes/{}/conversations.json".format(mailbox_id), fields)
         return self.page(url, "Conversation", 200, **kwargs)
 
-    def conversation_for_customer_by_mailbox(self, mailbox_id, customer_id, fields=None, **kwargs):
+    def conversations_for_customer_by_mailbox(self, mailbox_id, customer_id, fields=None, **kwargs):
         url = "mailboxes/{}/customers/{}/conversations.json".format(mailbox_id, customer_id)
+        url = add_fields(url, fields)
+        return self.page(url, "Conversation", 200, **kwargs)
+
+    def conversations_for_user_by_mailbox(self, mailbox_id, user_id, fields=None, **kwargs):
+        url = "mailboxes/{}/customers/{}/conversations.json".format(mailbox_id, user_id)
         url = add_fields(url, fields)
         return self.page(url, "Conversation", 200, **kwargs)
 
@@ -74,62 +71,51 @@ class Client(object):
         url = add_fields("mailboxes/{}/users.json".format(mailbox_id), fields)
         return self.page(url, "User", 200, **kwargs)
 
-    def call_server(self, url, expected_code, **kwargs):
-        headers = {'Content-Type': 'application-json'
-                  , 'Accept' : 'application-json'
-                  , 'Accept-Encoding' : 'gzip, deflate'
+    def call_server(self, url, expected_code, **params):
+        headers = {'Content-Type': 'application-json',
+                   'Accept' : 'application-json',
+                   'Accept-Encoding' : 'gzip, deflate'
                   }
-        qsp = {}
-        if kwargs:
-            qsp = kwargs
-        r = requests.get(self.BASE_URL + url, headers=headers, auth=(self.API_KEY, 'x'), params=qsp)
-        check_status_code(r.status_code, expected_code)
-        return r.text
+        req = requests.get('{}{}'.format(self.base_url, url),
+                           headers=headers, auth=(self.api_key, 'x'), params=params)
+        check_status_code(req.status_code, expected_code)
+        return req.text
 
-    def item(self, url, clazz, expected_code):
-        string_json = self.call_server( url, expected_code )
-        return parse(json.loads(string_json)["item"], clazz)
+    def item(self, url, cls, expected_code):
+        string_json = self.call_server(url, expected_code)
+        return parse(json.loads(string_json)["item"], cls)
 
-    def page(self, url, clazz, expected_code, **kwargs):
+    def page(self, url, cls, expected_code, **kwargs):
         # support calling many times to get subsequent pages
         caller = inspect.stack()[1][3]
-        if caller in self.pagestate:
-            curpage = self.pagestate[caller].get('page')
-            maxpage = self.pagestate[caller].get('pages')
-            if curpage < maxpage:
-                kwargs['page'] = curpage + 1
-            elif curpage == maxpage:
-                return None
-        else:
-            kwargs['page'] = 1
+        if kwargs.get('page') is None:
+            if caller in self.pagestate:
+                (pcur, pmax) = [self.pagestate[caller].get(x) for x in ['page', 'pages']]
+                if all((pcur, pmax)) and pcur < pmax:
+                    kwargs['page'] = pcur + 1
+                elif pcur == pmax:
+                    return None
 
         string_json = self.call_server(url, expected_code, **kwargs)
         json_obj = json.loads(string_json)
-        p = Page()
+        page = Page()
         for key, value in json_obj.items():
-            setattr(p, key, value)
-        p.items = parse_list(p.items, clazz)
+            setattr(page, key, value)
+        page.items = parse_list(page.items, cls)
 
         # update state cache with response details
-        self.pagestate[caller] = {'page': p.page, 'pages': p.pages}
+        self.pagestate[caller] = {'page': page.page, 'pages': page.pages}
 
-        return p
+        return page
 
-    def setpage(self, function, page=2):
-        '''Set a specific page number to start at when fetching paginated data'''
-        if self.pagestate.get(function, None):
-            self.pagestate[function]['page'] = int(page) - 1
-            # this will be updated to be valid on the next call to "function"
-            self.pagestate[function]['pages'] = int(page)
-
-    def reset(self, function=None):
+    def clearstate(self, function=None):
         '''Clear the function state tracking, optionally taking a specific function to clear
            Usage:
              client.reset()
              client.reset('users_for_mailbox')
         '''
         if function:
-            if self.pagestate.pop(function, None) == None:
+            if self.pagestate.pop(function, None) is None:
                 return False
         else:
             self.pagestate = {}
@@ -158,24 +144,20 @@ def check_status_code(code, expected):
 
 def add_fields(url, fields):
     final_str = url
-    if fields != None and len(fields) > 0 :
-        final_str += "?fields="
-        sep = ""
-        for key,value in fields:
-            final_str += sep + value
-            sep = ","
+    if fields != None and len(fields) > 0:
+        final_str = "{}?fields={}".format(url, ','.join(fields))
     return final_str
 
-def parse(json, clazz):
-    c = getattr(models, clazz)()
-    for key, value in list(json.items()):
-        setattr(c, key, value)
-    return c
+def parse(json_obj, cls):
+    obj = getattr(models, cls)()
+    for key, value in list(json_obj.items()):
+        setattr(obj, key.lower(), value)
+    return obj
 
-def parse_list(lizt, clazz):
-    for i in range (len(lizt)):
-        lizt[i] = parse(lizt[i], clazz)
-    return lizt
+def parse_list(lst, cls):
+    for i in range(len(lst)):
+        lst[i] = parse(lst[i], cls)
+    return lst
 
 class Page:
     def __init__(self):
@@ -183,7 +165,7 @@ class Page:
         self.pages = None
         self.count = None
         self.items = None
-
+    
 class ApiException(Exception):
     def __init__(self, message):
-        Exception.__init__(self,message)
+        Exception.__init__(self, message)
