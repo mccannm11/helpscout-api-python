@@ -165,6 +165,9 @@ class Page:
         self.pages = None
         self.count = None
         self.items = None
+    def __getitem__(self, index):
+        return self.items[index]
+
     
 class ApiException(Exception):
     def __init__(self, message):
