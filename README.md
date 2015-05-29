@@ -11,13 +11,13 @@ Example Usage: API
 ---------------------
 
 ```
-import hsapi
+import helpscout
 
-client = hsapi.ApiClient()
+client = helpscout.Client()
 client.API_KEY = "your-api-key-here"
 
 mailboxes = client.mailboxes()
-folders = mailboxes.folders
+folders = client.folders(mailboxes.items[0].id)
 for f in folders:
     #do things here
 
@@ -49,7 +49,7 @@ Each method can accept a field selector as an addition parameter.
 * conversations_for_folders(int mailbox_id, int folder_id)
 * conversations_for_mailbox(int mailbox_id)
 * conversations_for_customerByMailbox(int mailbox_id, int customer_id)
-* conversation(Integer conversation_id)
+* conversation(int conversation_id)
 
 ### Attachments
 * attachment_data(int attachment_id)
@@ -63,3 +63,8 @@ Each method can accept a field selector as an addition parameter.
 * users_for_mailbox(int mailbox_id)
 * user(int user_id)
 
+### Pagination
+Multiple calls to the above calls that support pagination will return subsequent pages.  
+* clearstate() - to clear the pagination couters and start from page 1 again.
+* clearstate(str 'function') - to clear the pagination couter for a given function, e.g. "folders"
+You could set the starting page by passing in page=N as a keyword arg.
