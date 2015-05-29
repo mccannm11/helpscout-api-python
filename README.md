@@ -14,7 +14,7 @@ Example Usage: API
 import helpscout
 
 client = helpscout.Client()
-client.API_KEY = "your-api-key-here"
+client.api_key = "your-api-key-here"
 
 mailboxes = client.mailboxes()
 folders = client.folders(mailboxes.items[0].id)
