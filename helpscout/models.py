@@ -1,3 +1,5 @@
+import client
+
 class Attachment:
     def __init__(self):
         self.id = None
@@ -11,7 +13,7 @@ class Attachment:
     def isimage(self):
         return self.mimetype is not None and self.mimetype.startwith('image')
 
-class Conversation:
+class Conversation(object):
     def __init__(self):
         self.id = None
         self.folderid = None
@@ -33,7 +35,7 @@ class Conversation:
         self.cclist = None
         self.bcclist = None
         self.tags = None
-        self.threads = None
+        self._threads = None
 
     def iscreatedbycustomer(self):
         return self.createdby is not None and isinstance(self.createdby, CustomerRef)
@@ -48,7 +50,17 @@ class Conversation:
         return self.tags is not None and len(self.tags) > 0
 
     def hasthreads(self):
-        return self.threads is not None and len(self.threads) > 0
+        return self._threads is not None and len(self._threads) > 0
+
+    @property
+    def threads(self):
+        """threads"""
+        return self._threads
+
+    @threads.setter
+    def threads(self, value):
+        self._threads = client.parse_list(value, "Thread")
+
 
 class Customer:
     def __init__(self):
@@ -204,7 +216,7 @@ class CustomerRef(AbstractRef):
         super(CustomerRef, self).__init__()
 
 
-class AbstractThread:
+class Thread(object):
     def __init__(self):
         self.id = None
         self.state = None
