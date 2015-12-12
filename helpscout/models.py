@@ -33,6 +33,7 @@ class Conversation:
         self.cclist = None
         self.bcclist = None
         self.tags = None
+        self.threads = None
 
     def iscreatedbycustomer(self):
         return self.createdby is not None and isinstance(self.createdby, CustomerRef)
@@ -45,6 +46,9 @@ class Conversation:
 
     def hastags(self):
         return self.tags is not None and len(self.tags) > 0
+
+    def hasthreads(self):
+        return self.threads is not None and len(self.threads) > 0
 
 class Customer:
     def __init__(self):
