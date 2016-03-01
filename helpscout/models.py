@@ -255,4 +255,16 @@ class ForwardParent(AbstractRef):
     def __init__(self):
         super(ForwardParent, self).__init__()
 
+class Search:
+    def __init__(self):
+        self.id = None
+        self.number = None
+        self.mailboxid = None
+        self.subject = None
+        self.status = None
+        self.threadcount = None
+        self.preview = None
+        self.customerName = None
+        self.customerEmail = None
+        self.modifiedAt = None
 
