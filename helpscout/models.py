@@ -1,4 +1,9 @@
-import client
+try:
+    from . import client
+except ImportError:
+    from importlib import import_module
+    client = import_module("helpscout.client")
+
 
 class Attachment:
     def __init__(self):
