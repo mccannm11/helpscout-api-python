@@ -71,6 +71,10 @@ class Client(object):
         url = add_fields("mailboxes/{}/users.json".format(mailbox_id), fields)
         return self.page(url, "User", 200, **kwargs)
 
+    def search(self, query=None, sort_field="number", sort_order="asc", **kwargs):
+        url = "search/conversations.json?query=({})&sort_field={}&sort_order={}".format(query, sort_field, sort_order)
+        return self.page(url, "Search", 200, **kwargs)
+
     def call_server(self, url, expected_code, **params):
         headers = {'Content-Type': 'application-json',
                    'Accept' : 'application-json',

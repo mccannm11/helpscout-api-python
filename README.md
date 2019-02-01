@@ -63,6 +63,14 @@ Each method can accept a field selector as an addition parameter.
 * users_for_mailbox(int mailbox_id)
 * user(int user_id)
 
+### Search
+* search()
+* search(query="subject:foo")
+* search(query="subject:foo", sort_by="number", sort_order="asc")
+
+See full syntax for query parameter here:
+http://developer.helpscout.net/help-desk-api/search/conversations/
+
 ### Pagination
 Multiple calls to the above calls that support pagination will return subsequent pages.  
 * clearstate() - to clear the pagination couters and start from page 1 again.
